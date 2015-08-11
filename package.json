@@ -1,0 +1,26 @@
+{
+  "name": "nodetunes",
+  "version": "1.0.0",
+  "description": "A MongoDB CRUD exercise.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnwquarles/nodetunes.git"
+  },
+  "author": "johnwquarles",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/johnwquarles/nodetunes/issues"
+  },
+  "homepage": "https://github.com/johnwquarles/nodetunes#readme",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "ejs": "^2.3.3",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.13.3",
+    "mongodb": "^2.0.40"
+  }
+}

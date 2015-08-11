@@ -1,0 +1,37 @@
+<% layout('partials/_layout') -%>
+<h1>EDIT <%= artist.name %> </h1>
+<form action="edit" method="POST">
+Name: <input type="text" name="name" value="<%= artist.name %>">
+Genre:
+<select name="genre">
+  <option value="reggae">Reggae</option>
+  <option value="rock">Rock</option>
+  <option value="smooth jazz">Smooth Jazz</option>
+  <option value="ranch">Ranch</option>
+</select>
+Language:
+<select name="language">
+  <option value="english">English</option>
+  <option value="japanese">Japanese</option>
+  <option value="french">French</option>
+  <option value="spanish">Spanish</option>
+</select>
+Nationality:
+<select name="nationality">
+  <option value="american">American</option>
+  <option value="japanese">Japanese</option>
+  <option value="french">French</option>
+  <option value="spanish">Spanish</option>
+</select>
+Bio:
+<textarea name="bio"><%= artist.bio %></textarea>
+Members:
+<input type="radio" name="members" value="1">1
+<input type="radio" name="members" value="2">2
+<input type="radio" name="members" value="3">3
+<input type="radio" name="members" value="somany">all of them
+<input type="radio" name="members" value="no">band is fictitious
+Wikipedia Link:
+<input type="text" name="wikipedia" value="<%= artist.wikipedia %>">
+<input type="submit">
+<a href="/">Back to Index</a>

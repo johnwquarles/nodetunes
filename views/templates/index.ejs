@@ -1,0 +1,32 @@
+<% layout('partials/_layout') -%>
+<h1>INDEX</h1>
+
+<table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Genre</th>
+        <th>Language</th>
+        <th>Nationality</th>
+        <th>Bio</th>
+        <th>Members</th>
+        <th>Wikipedia Link</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach(function (entry) { %>
+        <tr>
+          <td><a href="/<%= entry._id %>/show"><%= entry.name %></a></td>
+          <td><%= entry.genre %></td>
+          <td><%= entry.language %></td>
+          <td><%= entry.nationality %></td>
+          <td><%= entry.bio %></td>
+          <td><%= entry.members %></td>
+          <td><a href="<%= entry.wikipedia %>">Wikipedia Link</a></td>
+          <td><form action="/<%= entry._id %>/delete" method="POST"><input type="submit" value="delete"></form></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <a href="/new">Make new</a>
