@@ -9,6 +9,10 @@ app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 app.use(bodyParser.urlencoded({extended: false}));
 
+if (process.env.NODE_ENV !== 'production') {
+  require('./lib/secrets');
+}
+
 require('./lib/mongodb');
 
 app.locals.maintitle = "NodeTunes";
@@ -84,7 +88,9 @@ app
     res.status(500).send("An error has occurred.");
   });
 
-var server = app.listen(3000, function () {
+var port = process.env.PORT || 3000;
+
+var server = app.listen(port, function () {
   var host = server.address().address;
   var port = server.address().port;
 
