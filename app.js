@@ -9,8 +9,6 @@ app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 app.use(bodyParser.urlencoded({extended: false}));
 
-console.log(process.env.NODE_ENV);
-
 if (process.env.NODE_ENV !== 'production') {
   require('./lib/secrets');
 }
