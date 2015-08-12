@@ -1,10 +1,32 @@
 <% layout('partials/_layout') -%>
-<h1><%= artist.name %></h1>
-<p>Genre: <%= artist.genre %></p>
-<p>Language: <%= artist.language %></p>
-<p>Nationality: <%= artist.nationality %></p>
-<p>Bio: <%= artist.bio %></p>
-<p>Members: <%= artist.members %></p>
-<a href="<%= artist.wikipedia %>">Wikipedia Link</a>
-<a href="edit">Edit this Artist</a>
-<a href="/">Back to Index</a>
+<h1><%= artist.name %> </h1>
+<table>
+  <tr>
+    <td>Genre:</td>
+    <td><%= artist.genre %></td>
+  </tr>
+  <tr>
+    <td>Language:</td>
+    <td><%= artist.language %></td>
+  </tr>
+  <tr>
+    <td>Nationality:</td>
+    <td><%= artist.nationality %></td>
+  </tr>
+  <tr>
+    <td>Bio:</td>
+    <td><%= artist.bio %></td>
+  </tr>
+  <tr>
+    <td>Members:</td>
+    <td><%= artist.members %></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><a href="<%= artist.wikipedia %>">Wikipedia</a></td>
+  </tr>
+  <tr>
+    <td><a href="edit"><button>Edit this Artist</button></a></td>
+    <td><a href="/"><button>Back to Index</button></a></td>
+  </tr>
+</table>

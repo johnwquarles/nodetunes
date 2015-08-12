@@ -1,0 +1,33 @@
+<% layout('partials/_layout') -%>
+<h1>New Album</h1>
+
+<div class="artist-search">
+  <input type="text" placeholder="artist">
+  <button>Search Artists</button>
+</div>
+
+<div class="artist-options"></div>
+
+<form class="artist-form hidden" method="POST" action="/album/new">
+  <!-- put in artist's _id in the input's .val() below via JS so that it's submitted with form data.-->
+  <input type="text" class="hidden" name="artistId">
+  <input type="text" class="hidden" name="artist">
+  <table>
+    <thead>
+      <th>Artist</th>
+      <th>Name</th>
+      <th>Year</th>
+      <th></th>
+    </thead>
+    <tr>
+      <td></td>
+      <td><input type="text" name="name" placeholder="Album Name"></td>
+      <td><input type="year" name="year" placeholder="Year Released"></td>
+      <td><input type="submit" value="submit"></td>
+    </tr>
+  </table>
+</form>
+
+<a href="/album"><button>Back to Albums</button></a>
+
+<script src="../../js/album-new.js"></script>

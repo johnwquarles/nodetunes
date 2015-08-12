@@ -1,0 +1,65 @@
+<% layout('partials/_layout') -%>
+<h1>EDIT <%= artist.name %> </h1>
+<table>
+  <form action="edit" method="POST">
+    <tr>
+      <td>Name:</td>
+      <td><input type="text" name="name" value="<%= artist.name %>"></td>
+    </tr>
+    <tr>
+      <td>Genre:</td>
+      <td>
+        <select name="genre">
+          <option value="reggae" selected="<% artist.genre === 'reggae' ? 'selected': '' %>">Reggae</option>
+          <option value="rock" selected="<% artist.genre === 'rock' ? 'selected': '' %>">Rock</option>
+          <option value="smooth jazz" selected="<% artist.genre === 'smooth jazz' ? 'selected': '' %>">Smooth Jazz</option>
+          <option value="ranch" selected="<% artist.genre === 'ranch' ? 'selected': '' %>">Ranch</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Language:</td>
+      <td>
+        <select name="language">
+          <option value="english" selected="<% artist.language === 'english' ? 'selected': '' %>">English</option>
+          <option value="japanese" selected="<% artist.language === 'japanese' ? 'selected': '' %>">Japanese</option>
+          <option value="french" selected="<% artist.language === 'french' ? 'selected': '' %>">French</option>
+          <option value="spanish" selected="<% artist.language === 'spanish' ? 'selected': '' %>">Spanish</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Nationality:</td>
+      <td>
+        <select name="nationality">
+          <option value="american" selected="<% artist.nationality === 'american' ? 'selected': '' %>">American</option>
+          <option value="japanese" selected="<% artist.nationality === 'japanese' ? 'selected': '' %>">Japanese</option>
+          <option value="french" selected="<% artist.nationality === 'french' ? 'selected': '' %>">French</option>
+          <option value="spanish" selected="<% artist.nationality === 'spanish' ? 'selected': '' %>">Spanish</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Bio:</td>
+      <td><textarea name="bio"><%= artist.bio %></textarea></td>
+    </tr>
+    <tr>
+      <td>Members:</td>
+      <td>
+        <input type="radio" name="members" value="1" checked="<% artist.members === '1' ? 'checked': '' %>">1
+        <input type="radio" name="members" value="2" checked="<% artist.members === '2' ? 'checked': '' %>">2
+        <input type="radio" name="members" value="3" checked="<% artist.members === '3' ? 'checked': '' %>">3
+        <input type="radio" name="members" value="somany" checked="<% artist.members === 'somany' ? 'checked': '' %>">all of them
+        <input type="radio" name="members" value="no" checked="<% artist.members === 'no' ? 'checked': '' %>">band is fictitious
+      </td>
+    </tr>
+    <tr>
+      <td>Wikipedia Link:</td>
+      <td><input type="text" name="wikipedia" value="<%= artist.wikipedia %>"></td>
+    </tr>
+    <tr>
+      <td><input type="submit"></td>
+      <td><a href="/<%= artist._id %>/show">Cancel</a></td>
+    </tr>
+  </form>
+</table>

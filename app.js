@@ -9,6 +9,10 @@ app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 app.use(bodyParser.urlencoded({extended: false}));
 
+// NOTE: public is NOT included in the URL!
+// go direct to localhost:3000/js to get to js subdirectory.
+app.use(express.static('public'));
+
 if (process.env.NODE_ENV !== 'production') {
   require('./lib/secrets');
 }
@@ -24,14 +28,14 @@ router
       var obj = {};
       obj.pagetitle = "All the Artists";
       obj.data = artists;
-      res.render('templates/index', obj);
+      res.render('templates/artist-index', obj);
     });
   })
 
   .get('/new', function(req, res) {
     var obj = {};
     obj.pagetitle = "New Artist";
-    res.render('templates/new', obj);
+    res.render('templates/artist-new', obj);
   })
 
   .post('/new', function(req, res) {
@@ -65,7 +69,7 @@ router
       var obj = {};
       obj.pagetitle = result.name;
       obj.artist = result;
-      res.render('templates/edit', obj);
+      res.render('templates/artist-edit', obj);
     })
   })
 
@@ -75,6 +79,58 @@ router
       if (err) {console.log(err);}
       res.redirect('/');
     });
+  })
+
+  .get('/album', function(req, res) {
+    var albumCollection = global.db.collection('albums');
+    var artistCollection = global.db.collection('artists');
+    var obj = {};
+    obj.data = [];
+    obj.pagetitle = "All Albums";
+    albumCollection.find().toArray(function(err, albums) {
+      albums.forEach(function(album, i) {
+        artistCollection.findOne({_id: ObjectId(album.artistId)}, function(err, result) {
+          if (err) {console.log(err);}
+          album.artist = result.name;
+          obj.data.push(album);
+          if (i === albums.length - 1) {
+            res.render('templates/album-index', obj);
+          }
+        });
+      })
+    });
+  })
+
+  .get('/album/new', function(req, res) {
+    var obj = {};
+    obj.pagetitle = "New Album";
+    res.render('templates/album-new', obj);
+  })
+
+  .post('/album/new', function(req, res) {
+    var collection = global.db.collection('albums');
+    collection.save(req.body, function() {
+      res.redirect('/album');
+    });
+  })
+
+  .post('/album/:id/delete', function(req, res) {
+    console.log("posted");
+    var collection = global.db.collection('albums');
+    collection.remove({_id: ObjectId(req.params.id)}, function(err) {
+      if (err) {console.log(err);}
+      res.redirect('/album');
+    });
+  })
+
+  .get('/artist/search', function(req, res) {
+    var artist = req.query.artist;
+    var collection = global.db.collection('artists');
+    collection.createIndex({name: "text"});
+    collection.find({$text: {$search: artist}}).toArray(function(err, results) {
+      if (err) {res.send(err);}
+      res.send(results);
+    })
   })
 
 app.use(router);
