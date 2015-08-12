@@ -1,0 +1,20 @@
+<% layout('partials/_layout') -%>
+<h1>All Albums by <%= pagetitle%></h1>
+
+<table>
+  <thead>
+    <th>Album Title</th>
+    <th>Year</th>
+    <th></th>
+  </thead>
+  <% data.forEach(function(album) { %>
+    <tr>
+      <td><%= album.name %></td>
+      <td><%= album.year %></td>
+      <td><form method="POST" action="/album/<%= album._id %>/delete"><input type="submit" value="delete"></form></td>
+    </tr>
+  <% }) %>
+</table>
+
+<a href="/<%= data[0].artistId %>/show"><button>Back to Artist Page</button></a>
+<a href="/"><button>Back to Artists</button></a>

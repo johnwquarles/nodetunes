@@ -81,22 +81,39 @@ router
     });
   })
 
+  .get('/:id/albums', function(req, res) {
+    var albumCollection = global.db.collection('albums');
+    var artistCollection = global.db.collection('artists');
+    var obj = {};
+    albumCollection.find({artistId: req.params.id}).toArray().then(function(albums) {
+      // albums.forEach(function(album){console.log(Object.keys(album));});
+      obj.data = albums;
+      // console.log(obj.data[0]['name']);
+    }).catch(function(error) {console.log(error);});
+    artistCollection.findOne({_id: ObjectId(req.params.id)}).then(function(artist) {
+      obj.pagetitle = artist.name;
+      // console.log(obj.data[0]['name']);
+      // console.log(obj.pagetitle);
+    }).then(function(){
+      res.render('templates/artist-albums', obj);
+    }).catch(function(error) {console.log(error);});
+  })
+
   .get('/album', function(req, res) {
     var albumCollection = global.db.collection('albums');
     var artistCollection = global.db.collection('artists');
     var obj = {};
     obj.data = [];
     obj.pagetitle = "All Albums";
-    albumCollection.find().toArray(function(err, albums) {
+    albumCollection.find().toArray().then(function(albums) {
       albums.forEach(function(album, i) {
-        artistCollection.findOne({_id: ObjectId(album.artistId)}, function(err, result) {
-          if (err) {console.log(err);}
+        artistCollection.findOne({_id: ObjectId(album.artistId)}).then(function(result) {
           album.artist = result.name;
           obj.data.push(album);
           if (i === albums.length - 1) {
             res.render('templates/album-index', obj);
           }
-        });
+        }).catch(function(error) {console.log(error);});
       })
     });
   })
