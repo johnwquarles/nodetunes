@@ -1,6 +1,6 @@
 <% layout('partials/_layout') -%>
 <h1><%= artist.name %> </h1>
-<table>
+<table class="table-bordered">
   <tr>
     <td>Genre:</td>
     <td><%= artist.genre %></td>
@@ -24,6 +24,14 @@
   <tr>
     <td></td>
     <td><a href="<%= artist.wikipedia %>">Wikipedia</a></td>
+  </tr>
+  <tr>
+    <td>Favorite?</td>
+    <td>
+      <% if (artist.favorite) { %>
+        <img src="../heart.png"/>
+      <% } %>
+    </td>
   </tr>
   <tr>
     <td><a href="edit"><button>Edit this Artist</button></a></td>

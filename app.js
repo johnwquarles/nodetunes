@@ -1,9 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var ObjectId = require('mongodb').ObjectID;
 
 var app = express();
 var router = express.Router();
-var ObjectId = require('mongodb').ObjectID;
 
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
@@ -18,135 +18,91 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./lib/mongodb');
+var artistModel = require('./models/artistModel');
+var albumModel = require('./models/albumModel');
 
 app.locals.maintitle = "NodeTunes";
 
 router
   .get('/', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.find().toArray(function(err, artists) {
-      var obj = {};
-      obj.pagetitle = "All the Artists";
-      obj.data = artists;
-      res.render('templates/artist-index', obj);
-    });
+    var obj = artistModel.findAll(function(obj){
+      res.render('templates/artist-index', {data: obj, pagetitle: "All the Artists"});
+    })
   })
 
   .get('/new', function(req, res) {
-    var obj = {};
-    obj.pagetitle = "New Artist";
-    res.render('templates/artist-new', obj);
+    res.render('templates/artist-new', {pagetitle: "New Artist"});
   })
 
   .post('/new', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.save(req.body, function() {
+    var artist = new artistModel(req.body);
+    artist.save(function() {
       res.redirect('/');
     });
   })
 
   .get('/:id/show', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.findOne({_id: ObjectId(req.params.id)}, function(err, result) {
-      var obj = {};
-      obj.pagetitle = result.name;
-      obj.artist = result;
-      res.render('templates/artist', obj);
+    artistModel.findArtist(req.params.id, function(artist) {
+      res.render('templates/artist', {pagetitle: artist.name, artist: artist});
     })
   })
 
   .post('/:id/edit', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.update({_id: ObjectId(req.params.id)}, {$set: req.body}, function(err) {
-      if (err) {console.log(err);}
-      res.redirect("/" + req.params.id + "/show");
+    artistModel.findArtist(req.params.id, function(artist) {
+      artist.update(req.body, function() {
+        res.redirect("/" + req.params.id + "/show");
+      })
     })
   })
 
   .get('/:id/edit', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.findOne({_id: ObjectId(req.params.id)}, function(err, result) {
-      var obj = {};
-      obj.pagetitle = result.name;
-      obj.artist = result;
-      res.render('templates/artist-edit', obj);
+    artistModel.findArtist(req.params.id, function(artist) {
+      res.render('templates/artist-edit', {pagetitle: artist.name, artist: artist});
     })
   })
 
   .post('/:id/delete', function(req, res) {
-    var collection = global.db.collection('artists');
-    collection.remove({_id: ObjectId(req.params.id)}, function(err) {
-      if (err) {console.log(err);}
-      res.redirect('/');
-    });
+    artistModel.findArtist(req.params.id, function(artist) {
+      artist.delete(function() {
+        res.redirect('/');
+      })
+    })
+  })
+
+  .get('/search', function(req, res) {
+    artistModel.search(req.query.artist, function(arr) {
+      res.send(arr);
+    })
   })
 
   .get('/:id/albums', function(req, res) {
-    var albumCollection = global.db.collection('albums');
-    var artistCollection = global.db.collection('artists');
-    var obj = {};
-    albumCollection.find({artistId: req.params.id}).toArray().then(function(albums) {
-      // albums.forEach(function(album){console.log(Object.keys(album));});
-      obj.data = albums;
-      // console.log(obj.data[0]['name']);
-    }).catch(function(error) {console.log(error);});
-    artistCollection.findOne({_id: ObjectId(req.params.id)}).then(function(artist) {
-      obj.pagetitle = artist.name;
-      // console.log(obj.data[0]['name']);
-      // console.log(obj.pagetitle);
-    }).then(function(){
-      res.render('templates/artist-albums', obj);
-    }).catch(function(error) {console.log(error);});
+    albumModel.getArtistAlbums(req.params.id, function(albums) {
+      artistModel.findArtist(req.params.id, function(artist) {
+        res.render('templates/artist-albums', {pagetitle: "Albums by " + artist.name, data: albums});
+      })
+    })
   })
 
   .get('/album', function(req, res) {
-    var albumCollection = global.db.collection('albums');
-    var artistCollection = global.db.collection('artists');
-    var obj = {};
-    obj.data = [];
-    obj.pagetitle = "All Albums";
-    albumCollection.find().toArray().then(function(albums) {
-      albums.forEach(function(album, i) {
-        artistCollection.findOne({_id: ObjectId(album.artistId)}).then(function(result) {
-          album.artist = result.name;
-          obj.data.push(album);
-          if (i === albums.length - 1) {
-            res.render('templates/album-index', obj);
-          }
-        }).catch(function(error) {console.log(error);});
-      })
-    });
+    albumModel.findAll(function(albums) {
+      res.render('templates/album-index', {pagetitle: 'All Albums', data: albums});
+    })
   })
 
   .get('/album/new', function(req, res) {
-    var obj = {};
-    obj.pagetitle = "New Album";
-    res.render('templates/album-new', obj);
+    res.render('templates/album-new', {pagetitle: "New Album"});
   })
 
   .post('/album/new', function(req, res) {
-    var collection = global.db.collection('albums');
-    collection.save(req.body, function() {
+    var album = new albumModel(req.body);
+    album.save(function() {
       res.redirect('/album');
-    });
+    })
   })
 
   .post('/album/:id/delete', function(req, res) {
-    console.log("posted");
-    var collection = global.db.collection('albums');
-    collection.remove({_id: ObjectId(req.params.id)}, function(err) {
-      if (err) {console.log(err);}
+    albumModel.delete(req.params.id, function() {
       res.redirect('/album');
-    });
-  })
-
-  .get('/artist/search', function(req, res) {
-    var artist = req.query.artist;
-    var collection = global.db.collection('artists');
-    collection.createIndex({name: "text"});
-    collection.find({$text: {$search: artist}}).toArray(function(err, results) {
-      if (err) {res.send(err);}
-      res.send(results);
     })
   })
 

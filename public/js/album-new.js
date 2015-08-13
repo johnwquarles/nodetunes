@@ -5,7 +5,7 @@ $searchBtn.on('click', function(){
   var artistQuery = $searchInput.val();
   var searchObj = {artist: artistQuery};
   $(".artist-options") && $(".artist-options").empty();
-  $.get('/artist/search', searchObj).done(
+  $.get('/search', searchObj).done(
     function(results) {
       appendResults(results);
     });

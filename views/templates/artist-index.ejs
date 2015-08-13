@@ -1,7 +1,7 @@
 <% layout('partials/_layout') -%>
-<h1>INDEX</h1>
+<h1>All Artists</h1>
 
-<table>
+<table class="table-bordered">
     <thead>
       <tr>
         <th>Name</th>
@@ -11,6 +11,7 @@
         <th>Bio</th>
         <th>Members</th>
         <th>Wikipedia Link</th>
+        <th>Favorite?</th>
         <th>Delete</th>
       </tr>
     </thead>
@@ -24,6 +25,11 @@
           <td><%= entry.bio %></td>
           <td><%= entry.members %></td>
           <td><a href="<%= entry.wikipedia %>">Wikipedia Link</a></td>
+          <td>
+            <% if (entry.favorite) { %>
+              <img src="./heart.png"/>
+            <% } %>
+          </td>
           <td><form action="/<%= entry._id %>/delete" method="POST"><input type="submit" value="delete"></form></td>
         </tr>
       <% }); %>

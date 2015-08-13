@@ -1,6 +1,6 @@
 <% layout('partials/_layout') -%>
 <h1>MAEK NEW</h1>
-<table>
+<table class="table-bordered">
   <form action="/new" method="POST">
     <tr>
       <td>Name:</td>
@@ -49,6 +49,10 @@
     <tr>
       <td>Wikipedia Link:</td>
       <td><input type="text" name="wikipedia" placeholder="wikipedia link"></td>
+    </tr>
+    <tr>
+      <td>Favorite?</td>
+      <td><input type="checkbox" name="favorite" value="favorite"></td>
     </tr>
     <tr>
       <td><input type="submit"></td>
