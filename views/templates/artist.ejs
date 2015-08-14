@@ -27,9 +27,9 @@
   </tr>
   <tr>
     <td>Favorite?</td>
-    <td>
+    <td class='fav' artistId='<%= artist._id %>'>
       <% if (artist.favorite) { %>
-        <img src="../heart.png"/>
+        <img src='../heart.png' artistId='<%= artist._id %>'/>
       <% } %>
     </td>
   </tr>
@@ -41,3 +41,5 @@
     <td><a href="albums"><button>Albums by this Artist</button></a></td>
   </tr>
 </table>
+
+<script src="../../js/fav-clickhandler.js"></script>

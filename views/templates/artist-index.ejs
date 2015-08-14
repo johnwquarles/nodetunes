@@ -25,15 +25,18 @@
           <td><%= entry.bio %></td>
           <td><%= entry.members %></td>
           <td><a href="<%= entry.wikipedia %>">Wikipedia Link</a></td>
-          <td>
+          <td class='fav' artistId='<%= entry._id %>'>
             <% if (entry.favorite) { %>
-              <img src="./heart.png"/>
+              <img src="./heart.png" artistId='<%= entry._id %>'/>
             <% } %>
           </td>
-          <td><form action="/<%= entry._id %>/delete" method="POST"><input type="submit" value="delete"></form></td>
+          <td><form action="/<%= entry._id %>/delete" method="POST"><input type="submit" value="delete"></form>
+          </td>
         </tr>
       <% }); %>
     </tbody>
   </table>
   <a href="/new"><button>Make new</button></a>
   <a href="/album"><button>See Albums</button></a>
+
+<script src="../../js/fav-clickhandler.js"></script>

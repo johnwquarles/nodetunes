@@ -50,6 +50,12 @@ Artists.prototype.update = function(newAttrs, cb) {
   .catch(function(error) {console.log(error);});
 }
 
+Artists.prototype.togglefav = function(cb) {
+  newFavVal = this.favorite ? false: "favorite";
+  Artists.collection.update({_id: this._id}, {$set: {favorite: newFavVal}}).then(cb())
+  .catch(function(error) {console.log(error);});
+}
+
 Artists.prototype.delete = function(cb) {
   Artists.collection.remove({_id: this._id}).then(cb())
   .catch(function(error) {console.log(error);});
