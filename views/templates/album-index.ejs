@@ -1,22 +1,28 @@
 <% layout('partials/_layout') -%>
 <h1>All Albums</h1>
 
-<table class="table-bordered">
-  <thead>
-    <th>Artist</th>
-    <th>Album Title</th>
-    <th>Year</th>
-    <th></th>
-  </thead>
-  <% data.forEach(function(album) { %>
-    <tr>
-      <td><a href="/<%= album.artistId %>/show"><%= album.artist %></a></td>
-      <td><%= album.name %></td>
-      <td><%= album.year %></td>
-      <td><form method="POST" action="/album/<%= album._id %>/delete"><input type="submit" value="delete"></form></td>
-    </tr>
-  <% }) %>
-</table>
+<% if (!data[0]) { %>
+  <h3>None yet!</h3>
+<% } %>
+
+<% if (data[0]) { %>
+  <table class="table-bordered">
+    <thead>
+      <th>Artist</th>
+      <th>Album Title</th>
+      <th>Year</th>
+      <th></th>
+    </thead>
+    <% data.forEach(function(album) { %>
+      <tr>
+        <td><a href="/<%= album.artistId %>/show"><%= album.artist %></a></td>
+        <td><%= album.name %></td>
+        <td><%= album.year %></td>
+        <td><form method="POST" action="/album/<%= album._id %>/delete"><input type="submit" value="delete"></form></td>
+      </tr>
+    <% }) %>
+  </table>
+<% } %>
 
 <a href="/album/new"><button>Add Album</button></a>
 <a href="/"><button>Back to Artists</button></a>
