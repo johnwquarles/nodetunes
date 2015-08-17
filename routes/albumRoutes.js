@@ -5,7 +5,8 @@ var artistModel = require('../models/artistModel');
 
 router
   .get('/:id/albums', function(req, res) {
-    albumModel.getArtistAlbums(req.params.id, function(albums) {
+    // user id, artist id, cb
+    albumModel.getArtistAlbumsByUser(req.session.user._id, req.params.id, function(albums) {
       artistModel.findArtist(req.params.id, function(artist) {
         res.render('templates/artist-albums', {pagetitle: "Albums by " + artist.name, data: albums, artistId: artist._id});
       })
@@ -13,7 +14,7 @@ router
   })
 
   .get('/album', function(req, res) {
-    albumModel.findAll(function(albums) {
+    albumModel.findAllByUser(req.session.user._id, function(albums) {
       res.render('templates/album-index', {pagetitle: 'All Albums', data: albums});
     })
   })
@@ -23,9 +24,10 @@ router
   })
 
   .post('/album/new', function(req, res) {
+    req.body.userId = req.session.user._id;
     var album = new albumModel(req.body);
     album.save(function() {
-      res.done();
+      res.redirect('/album');
     })
   })
 

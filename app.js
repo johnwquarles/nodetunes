@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var ObjectId = require('mongodb').ObjectID;
+var session = require('express-session');
 
 var app = express();
 
@@ -10,6 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 var artistRoutes = require('./routes/artistRoutes');
 var albumRoutes = require('./routes/albumRoutes');
+var userRoutes = require('./routes/userRoutes');
 
 if (process.env.NODE_ENV !== 'production') {
   require('./lib/secrets');
@@ -20,6 +22,30 @@ var artistModel = require('./models/artistModel');
 var albumModel = require('./models/albumModel');
 
 app.locals.maintitle = "NodeTunes";
+
+// creates the cookie, I believe. No data is stored on it; all info is server-side in memory,
+// but is associated with the cookie id.
+app.use(session({
+  secret: 'thisisasecretphrase',
+  resave: false,
+  saveUninitialized: true
+}));
+
+// if there is no user already on the req.session (associated with the user's cookie)
+// set res.locals.user equal to null so that there's something in there (prevent undefined errors).
+// otherwise use same thing as req.session.user.
+app.use(function setResLocalsUser(req, res, next) {
+  res.locals.user = req.session.user || null;
+  next();
+})
+
+app.use('/user', userRoutes);
+
+// ------ require login from here ------
+
+app.use(function requireLogin(req, res, next) {
+  req.session.user ? next() : res.redirect('/user/login');
+})
 
 app.use('/', artistRoutes);
 app.use('/', albumRoutes);

@@ -2,7 +2,7 @@ var _ = require('lodash');
 var ObjectId = require('mongodb').ObjectID;
 
 function Artists(obj) {
-  this._id = obj._id;
+  this.userId = ObjectId(obj.userId);
   this.name = obj.name;
   this.genre = obj.genre;
   this.language = obj.language;
@@ -19,8 +19,8 @@ Object.defineProperty(Artists, "collection", {
   }
 })
 
-Artists.findAll = function (cb) {
-  Artists.collection.find().toArray().then(function(artists) {
+Artists.findAllForUser = function (_id, cb) {
+  Artists.collection.find({userId: ObjectId(_id)}).toArray().then(function(artists) {
     var prototypedArtists = artists.map(function(artist){
       return setPrototype(artist);
     })

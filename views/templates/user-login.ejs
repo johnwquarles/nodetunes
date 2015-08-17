@@ -1,0 +1,19 @@
+<% layout('partials/_layout') -%>
+<h1>Welcome to Nodetunes!</h1>
+<h3>Please log in to continue</h3>
+
+<% if (err) { %>
+  <h3><%= err %></h3>
+<% } %>
+
+<form method="POST" action="login">
+
+  <label for="username">Username</label>
+  <input type="text" name="username" />
+
+  <label for="password">Password</label>
+  <input type="password" name="password"/>
+
+  <input type="submit" value="log in securely through secure servers that are secure"/>
+
+</form>

@@ -4,7 +4,7 @@ var artistModel = require('../models/artistModel');
 
 router
   .get('/', function(req, res) {
-    var obj = artistModel.findAll(function(obj){
+    artistModel.findAllForUser(req.session.user._id, function(obj){
       res.render('templates/artist-index', {data: obj, pagetitle: "All the Artists"});
     })
   })
@@ -14,6 +14,7 @@ router
   })
 
   .post('/new', function(req, res) {
+    req.body.userId = req.session.user._id;
     var artist = new artistModel(req.body);
     artist.save(function() {
       res.redirect('/');
@@ -62,4 +63,4 @@ router
     })
   })
 
-  module.exports = router;
+module.exports = router;

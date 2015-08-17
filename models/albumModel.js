@@ -3,7 +3,8 @@ var ObjectId = require('mongodb').ObjectID;
 var artistModel = require('./artistModel');
 
 function Albums(obj) {
-  this.artistId = obj.artistId;
+  this.userId = ObjectId(obj.userId);
+  this.artistId = ObjectId(obj.artistId);
   this.name = obj.name;
   this.year = obj.year;
 }
@@ -14,9 +15,10 @@ Object.defineProperty(Albums, "collection", {
   }
 })
 
-Albums.findAll = function (cb) {
+Albums.findAllByUser = function (_id, cb) {
   var ret_arr = [];
-  Albums.collection.find().toArray().then(function(albums) {
+  Albums.collection.find({userId: ObjectId(_id)}).toArray().then(function(albums) {
+    if (albums.length === 0) {cb(ret_arr); return;}
     var prototypedAlbums = albums.map(function(album){
       return setPrototype(album);
     })
@@ -33,8 +35,8 @@ Albums.findAll = function (cb) {
   }).catch(function(error) {console.log(error);});
 }
 
-Albums.getArtistAlbums = function(artistId, cb) {
-  Albums.collection.find({artistId: artistId}).toArray().then(function(albums) {
+Albums.getArtistAlbumsByUser = function(userId, artistId, cb) {
+  Albums.collection.find({userId: ObjectId(userId), artistId: artistId}).toArray().then(function(albums) {
     cb(albums);
   }).catch(function(error) {console.log(error);});
 }

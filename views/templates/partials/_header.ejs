@@ -1,0 +1,12 @@
+<header>
+  <ul>
+    <% if (user) { %>
+      <li><a href="/album">Albums</a></li>
+      <li><a href="/">Artist Index</a></li>
+      <li><a href="/user/logout">Logout</a></li>
+    <% } else { %>
+      <li><a href="/user/login">Login</a></li>
+      <li><a href="/user/new">Register</a></li>
+    <% } %>
+  </ul>
+</header>
