@@ -1,0 +1,30 @@
+body {
+  text-align: center;
+  margin: auto;
+  background: orange;
+}
+
+body h1 {
+  clear: both;
+}
+
+body ul {
+  list-style: none;
+  float: right;
+}
+
+body ul li {
+  display: inline;
+}
+
+.hidden {
+  display: none;
+}
+
+table td, table th {
+  padding: 3px 5px;
+}
+
+h1, tr:last-of-type {
+  padding: 0 0 20px 0;
+}

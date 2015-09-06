@@ -1,13 +1,21 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var ObjectId = require('mongodb').ObjectID;
-var session = require('express-session');
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    ObjectId = require('mongodb').ObjectID,
+    session = require('express-session'),
+    sassMiddleware = require('node-sass-middleware');
 
 var app = express();
 
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-locals'));
 app.use(bodyParser.urlencoded({extended: false}));
+
+app.use ('/css', sassMiddleware({
+  src: './views/sass',
+  dest: './public/css',
+  debug: true,
+  outputStyle: 'expanded'
+}));
 
 var artistRoutes = require('./routes/artistRoutes');
 var albumRoutes = require('./routes/albumRoutes');
